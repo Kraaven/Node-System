@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,12 +17,15 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     private Vector2 startMousePosition;
 
     [Header("Top Connectors")] 
-    public GameObject LeftToggle;
-    public PathComponent LeftConnection;
-    public NodeScript LeftConnectedNode;
-    public GameObject RightToggle;
-    public PathComponent RightConnection;
-    public NodeScript RightConnectedNode;
+    public NodeScript Previous;
+    public NodeScript Next;
+    public PathComponent ConnectionPath;
+
+    [Header("Buttons")] 
+    public GameObject LeftButton;
+    public GameObject RightButton;
+    public GameObject LeftCancel;
+    
     
 
     private void Awake()
@@ -34,6 +38,8 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         Nodes.Add(this);
         NodeTransforms.Add(rectTransform);
+        LeftCancel.SetActive(false);
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -62,26 +68,46 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
             }
         }
 
-        UpdatePaths();
+        if (Next != null)
+        {
+            UpdatePaths();  
+        }
+
+        if (Previous != null)
+        {
+            Previous.UpdatePaths();
+        }
+
+
     }
 
-    public void DeleteLeftConnection()
+    public void DeleteConnection()
     {
-        LeftConnectedNode.RightConnection = null;
-        PathComponent.Paths.Remove(LeftConnection);
-        Destroy(LeftConnection.gameObject);
-        LeftConnection = null;
-        LeftConnectedNode = null;
+        Destroy(Previous.ConnectionPath);
+        Previous.RightButton.SetActive(true);
+        LeftCancel.SetActive(false);
+        LeftButton.SetActive(true);
+        
+        
+        Previous.Next = null;
+        Previous.ConnectionPath = null;
+        Previous = null;
     }
-    
-    public void DeleteRightConnection()
+
+    public void RequestConnection()
     {
-        RightConnectedNode.LeftConnection = null;
-        PathComponent.Paths.Remove(RightConnection);
-        Destroy(RightConnection.gameObject);
-        RightConnection = null;
-        RightConnectedNode = null;
+        GameManager.SetAsFirstSelection(this);
     }
+
+    public void RecieveConnection()
+    {
+        if (GameManager.Selection1 != this)
+        {
+            GameManager.SetSecondSelection(this);
+        }
+    }
+
+
 
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -90,15 +116,11 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void UpdatePaths()
     {
-        if (LeftConnection != null)
+        if (ConnectionPath != null )
         {
-            LeftConnection.UpdateLine();
+            ConnectionPath.UpdateLine();
         }
-
-        if (RightConnection != null)
-        {
-            RightConnection.UpdateLine();
-        }
+        
     }
 }
 

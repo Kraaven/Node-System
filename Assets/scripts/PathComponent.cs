@@ -25,6 +25,20 @@ public class PathComponent : MonoBehaviour
         
     }
 
+    public PathComponent(NodeScript Origin, NodeScript Destination)
+    {
+        P1 = Origin.transform.GetChild(1).GetComponent<RectTransform>();
+        P2 = Destination.transform.GetChild(0).GetComponent<RectTransform>();
+    }
+    
+    public PathComponent Init(NodeScript Origin, NodeScript Destination)
+    {
+        P1 = Origin.transform.GetChild(1).GetComponent<RectTransform>();
+        P2 = Destination.transform.GetChild(0).GetComponent<RectTransform>();
+
+        return this;
+    }
+
     public void UpdateLine()
     {
         points[0] = P1.TransformPoint(P1.position);
