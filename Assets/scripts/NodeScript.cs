@@ -130,3 +130,11 @@ public enum UsedButton
     Right,
     Middle
 }
+
+public interface CodeAction
+{
+    public string CodeActivity()
+    {
+        return "";
+    }
+}

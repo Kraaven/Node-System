@@ -33,10 +33,15 @@ public class PathComponent : MonoBehaviour
     
     public PathComponent Init(NodeScript Origin, NodeScript Destination)
     {
-        P1 = Origin.transform.GetChild(1).GetComponent<RectTransform>();
-        P2 = Destination.transform.GetChild(0).GetComponent<RectTransform>();
+        P1 = Origin.transform.GetChild(2).GetComponent<RectTransform>();
+        P2 = Destination.transform.GetChild(3).GetComponent<RectTransform>();
 
         return this;
+    }
+
+    public void Setcolor(Color color)
+    {
+        line.endColor = color;
     }
 
     public void UpdateLine()
