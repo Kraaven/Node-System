@@ -48,6 +48,15 @@ public class CanvasScaler : MonoBehaviour
             canvasRect.anchoredPosition -= offset;
 
             currentScale = newScale;
+
+            foreach (var path in PathComponent.Paths)
+            {
+                path.line.endWidth = currentScale/4;
+                path.line.startWidth = currentScale/4;
+                
+                path.UpdateLine();
+            }
+            
         }
 
         // Pan the canvas when middle mouse button is held down
@@ -55,6 +64,11 @@ public class CanvasScaler : MonoBehaviour
         {
             Vector2 mouseDelta = (Vector2)Input.mousePosition - prevMousePos;
             canvasRect.anchoredPosition += mouseDelta;
+
+            foreach (var VARIABLE in PathComponent.Paths)
+            {
+                VARIABLE.UpdateLine();
+            }
         }
 
         prevMousePos = Input.mousePosition;

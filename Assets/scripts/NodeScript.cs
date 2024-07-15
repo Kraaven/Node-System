@@ -15,6 +15,15 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     private Vector2 startPosition;
     private Vector2 startMousePosition;
 
+    [Header("Top Connectors")] 
+    public GameObject LeftToggle;
+    public PathComponent LeftConnection;
+    public NodeScript LeftConnectedNode;
+    public GameObject RightToggle;
+    public PathComponent RightConnection;
+    public NodeScript RightConnectedNode;
+    
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -52,11 +61,44 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                 rectTransform.anchoredPosition = startPosition + difference;
             }
         }
+
+        UpdatePaths();
+    }
+
+    public void DeleteLeftConnection()
+    {
+        LeftConnectedNode.RightConnection = null;
+        PathComponent.Paths.Remove(LeftConnection);
+        Destroy(LeftConnection.gameObject);
+        LeftConnection = null;
+        LeftConnectedNode = null;
+    }
+    
+    public void DeleteRightConnection()
+    {
+        RightConnectedNode.LeftConnection = null;
+        PathComponent.Paths.Remove(RightConnection);
+        Destroy(RightConnection.gameObject);
+        RightConnection = null;
+        RightConnectedNode = null;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         // Optional: Implement any logic needed when dragging ends.
+    }
+
+    public void UpdatePaths()
+    {
+        if (LeftConnection != null)
+        {
+            LeftConnection.UpdateLine();
+        }
+
+        if (RightConnection != null)
+        {
+            RightConnection.UpdateLine();
+        }
     }
 }
 
