@@ -83,7 +83,7 @@ public class NodeScript : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void DeleteConnection()
     {
-        Destroy(Previous.ConnectionPath);
+        Destroy(Previous.ConnectionPath.gameObject);
         Previous.RightButton.SetActive(true);
         LeftCancel.SetActive(false);
         LeftButton.SetActive(true);

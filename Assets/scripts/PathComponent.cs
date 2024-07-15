@@ -14,7 +14,7 @@ public class PathComponent : MonoBehaviour
 
     public static List<PathComponent> Paths = new List<PathComponent>();
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         points = new Vector3[2];
         line = GetComponent<LineRenderer>();
